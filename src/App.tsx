@@ -7,12 +7,12 @@ import {
   Label,
 } from 'react-component-library';
 import { useState } from 'react';
-import { TelcoTable } from './components/telco-table';
-import { CustomerTable } from './components/customer-table';
-import { CompanyTable } from './components/company-table';
+import { CompanyTable } from './data-components/company-table';
+import { CustomerTable } from './data-components/customer-table';
+import { TelcoTable } from './data-components/telco-table';
 
 function App() {
-  const defaultBasicDefault = Themes[1];
+  const defaultBasicDefault = Themes[0];
   const [theme, setTheme] = useState(defaultBasicDefault);
 
   function onRadioButtonChange(theme: DefaultTheme) {
@@ -21,15 +21,14 @@ function App() {
 
   function generateRadioButtons() {
     return Themes.map((item, index) => (
-      <LabelContainer key={`radio-${index}`}>
-        <Radio
-          checked={item.name === theme.name}
-          value={item.name}
-          label={item.name}
-          displaySize={Size.NORMAL}
-          onChange={() => onRadioButtonChange(item)}
-        />
-      </LabelContainer>
+      <Radio
+        checked={item.name === theme.name}
+        value={item.name}
+        label={item.name}
+        displaySize={Size.NORMAL}
+        key={`radio-${index}`}
+        onChange={() => onRadioButtonChange(item)}
+      />
     ));
   }
   return (
@@ -49,10 +48,6 @@ function App() {
     </ThemeProvider>
   );
 }
-const LabelContainer = styled.label`
-  display: flex;
-  align-items: center;
-`;
 
 const DivContainer = styled.div`
   display: flex;

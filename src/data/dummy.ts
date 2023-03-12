@@ -1,82 +1,76 @@
-import {
-  TelcoInterface,
-  CustomerInterface,
-  CompanyInterface,
-} from './interface';
-
-export const telcoDummyData: TelcoInterface[] = [
+export const telcoDummyData: Record<string, string | number | boolean>[] = [
   {
-    name: '*Celcom Axiata (LTE)',
-    headset: 'CELCOM / My Celcom / 502 19',
-    has3G: true,
+    Operator: '*Celcom Axiata (LTE)',
+    'Headset Display': 'CELCOM / My Celcom / 502 19',
+    '3G Availability': true,
   },
   {
-    name: '*DiGi Telecom (LTE)',
-    headset: 'DiGi 1800 / DiGi /  MYMY18',
-    has3G: true,
+    Operator: '*DiGi Telecom (LTE)',
+    'Headset Display': 'DiGi 1800 / DiGi /  MYMY18',
+    '3G Availability': true,
   },
   {
-    name: '*Maxis (LTE)',
-    headset: 'U Mobile / MYS 18 / MY 18',
-    has3G: true,
+    Operator: '*Maxis (LTE)',
+    'Headset Display': 'U Mobile / MYS 18 / MY 18',
+    '3G Availability': true,
   },
   {
-    name: 'U Mobile (LTE)',
-    headset: 'U Mobile / MYS 18 / MY 18',
-    has3G: true,
+    Operator: 'U Mobile (LTE)',
+    'Headset Display': 'U Mobile / MYS 18 / MY 18',
+    '3G Availability': true,
   },
 ];
 
-export const customerDummydata: CustomerInterface[] = [
+export const customerDummydata: Record<string, string | number | boolean>[] = [
   {
-    name: 'Mavis Chen',
-    mobile: '8899 7654',
+    Name: 'Mavis Chen',
+    Mobile: '8899 7654',
     expiry: 'Dec 2022',
-    penalty: 600,
+    Penalty: 600,
   },
   {
-    name: 'Rodney Artichoke',
-    mobile: '9988 7676',
-    expiry: 'Dec 2022',
-    penalty: 600,
+    Name: 'Rodney Artichoke',
+    Mobile: '9988 7676',
+    Expiry: 'Dec 2022',
+    Penalty: 600,
   },
   {
-    name: 'Valentino Morose',
-    mobile: '8900 7654',
-    expiry: 'Dec 2022',
-    penalty: 300,
+    Name: 'Valentino Morose',
+    Mobile: '8900 7654',
+    Expiry: 'Dec 2022',
+    Penalty: 300,
   },
   {
-    name: 'Eric Widget',
-    mobile: '8900 7654',
-    expiry: 'Dec 2022',
-    penalty: 300,
+    Name: 'Eric Widget',
+    Mobile: '8900 7654',
+    Expiry: 'Dec 2022',
+    Penalty: 300,
   },
 ];
 
-export const companyDummyData: CompanyInterface[] = [
+export const companyDummyData: Record<string, string | number | boolean>[] = [
   {
     BRN: '198702333K',
-    name: 'Blue Ocean International',
+    'Company Name': 'Blue Ocean International',
   },
   {
     BRN: '198900364N',
-    name: 'Red Electronics',
+    'Company Name': 'Red Electronics',
   },
   {
     BRN: '196700335H',
-    name: 'Yellow Gaming',
+    'Company Name': 'Yellow Gaming',
   },
   {
     BRN: '196800306E',
-    name: 'Purple Automobiles',
+    'Company Name': 'Purple Automobiles',
   },
   {
     BRN: '199131124V',
-    name: 'Diamond Interiors Holdings',
+    'Company Name': 'Diamond Interiors Holdings',
   },
   {
     BRN: '200201624D',
-    name: 'Omnichannel Solutions International',
+    'Company Name': 'Omnichannel Solutions International',
   },
 ];
