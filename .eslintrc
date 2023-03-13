@@ -22,7 +22,7 @@
   "env": {
     "jest": true
   },
-  "ignorePatterns": ["node_modules/**/*"],
+  "ignorePatterns": ["node_modules/**/*", "*.js"],
   "rules": {
     "no-console": "warn",
     "eqeqeq": "error",

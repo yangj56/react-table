@@ -21,14 +21,15 @@ function App() {
 
   function generateRadioButtons() {
     return Themes.map((item, index) => (
-      <Radio
-        checked={item.name === theme.name}
-        value={item.name}
-        label={item.name}
-        displaySize={Size.NORMAL}
-        key={`radio-${index}`}
-        onChange={() => onRadioButtonChange(item)}
-      />
+      <PaddedRadio key={`radio-${index}`}>
+        <Radio
+          checked={item.name === theme.name}
+          value={item.name}
+          label={item.name}
+          displaySize={Size.NORMAL}
+          onChange={() => onRadioButtonChange(item)}
+        />
+      </PaddedRadio>
     ));
   }
   return (
@@ -37,8 +38,8 @@ function App() {
       <MainContainer>
         <DisplayContainer>
           <DivContainer>
-            <Label label="Switch theme" displaySize={Size.NORMAL} />
-            {generateRadioButtons()}
+            <Label label="Switch theme: " displaySize={Size.NORMAL} />
+            <ThemeContainer>{generateRadioButtons()}</ThemeContainer>
           </DivContainer>
           <TelcoTable />
           <CustomerTable />
@@ -51,8 +52,17 @@ function App() {
 
 const DivContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 2rem;
+`;
+
+const ThemeContainer = styled.div`
+  display: flex;
   align-items: center;
   justify-content: flex-end;
+  margin-top: 1rem;
 `;
 
 const MainContainer = styled.div`
@@ -63,5 +73,9 @@ const MainContainer = styled.div`
 
 const DisplayContainer = styled.div`
   width: 80%;
+`;
+
+const PaddedRadio = styled.div`
+  margin-right: 2rem;
 `;
 export default App;

@@ -9,8 +9,10 @@ import {
   Radio,
   Size,
 } from 'react-component-library';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { devices } from '../utils/breakpoints';
+import { createCheckboxIdState } from '../utils/helpers';
 
 type DataSortFieldType = {
   name: string;
@@ -22,35 +24,46 @@ type SortableFieldType = {
   direction: Direction;
 };
 
-type SelectType = {
+type StyledComponentAddOnProps = {
+  size: number;
+  hasSelector?: boolean;
+  isSelected?: boolean;
+};
+
+export type SelectType = {
   name: 'radio' | 'checkbox';
-  selectKey: string;
 };
 
 type Props = {
-  data: Record<string, string | number | boolean>[];
+  data: Record<string, string>[];
   dataFields: DataSortFieldType[];
-  sortableField: SortableFieldType;
+  sortableField?: SortableFieldType;
   type?: SelectType;
+};
+
+Table.propTypes = {
+  data: PropTypes.array.isRequired,
+  dataFields: PropTypes.array.isRequired,
 };
 
 export function Table({ data, dataFields, sortableField, type }: Props) {
   const [displayData, setDisplayData] = useState(data);
   const [sortField, setSortableField] = useState(sortableField);
   const [selectedRadio, setSelectedRadio] = useState('');
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState<boolean[]>(
-    new Array(data.length).fill(false)
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState(
+    createCheckboxIdState(data, type)
   );
-
   const dataColumnLength = dataFields.length;
   const hasSelector = type !== undefined;
 
   useEffect(() => {
+    if (!sortField) {
+      return;
+    }
     if (sortField.direction === Direction.UNI) {
       setDisplayData(data);
       return;
     }
-
     const newDisplayData = [...displayData];
     newDisplayData.sort((x, y) => {
       if (x[sortField.name] === y[sortField.name]) {
@@ -70,29 +83,42 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
     setSelectedRadio(name);
   }
 
-  function onCheckboxChange(toggleIndex: number) {
-    setSelectedCheckboxes((prev) =>
-      prev.map((value, index) => (toggleIndex === index ? !value : value))
-    );
+  function onCheckboxChange(toggleId: string) {
+    setSelectedCheckboxes((prev) => {
+      return { ...prev, [toggleId]: !prev[toggleId] };
+    });
   }
 
   function onCheckboxAllChange() {
     setSelectedCheckboxes((prev) => {
-      let totalChecks = 0;
-      prev.forEach((item) => {
-        if (item) {
-          totalChecks += 1;
+      let allTruthy = true;
+      for (const item in prev) {
+        if (!prev[item]) {
+          allTruthy = false;
+          break;
         }
-      });
-      if (totalChecks === data.length) {
-        return new Array(data.length).fill(false);
       }
-      return new Array(data.length).fill(true);
+      if (allTruthy) {
+        return Object.assign(
+          {},
+          ...Object.keys(prev).map((item) => ({ [item]: false }))
+        );
+      }
+      return Object.assign(
+        {},
+        ...Object.keys(prev).map((item) => ({ [item]: true }))
+      );
     });
   }
 
   function sortOperator(dataField: string) {
     setSortableField((currentVal) => {
+      if (!currentVal) {
+        return {
+          direction: Direction.UP,
+          name: dataField,
+        };
+      }
       if (dataField !== currentVal.name) {
         return {
           direction: Direction.UP,
@@ -127,11 +153,13 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
   function generateHeader() {
     const headers = dataFields.map((dataField, index) => {
       const direction =
-        dataField.name === sortField.name && dataField.sortable === true
+        sortField &&
+        dataField.name === sortField.name &&
+        dataField.sortable === true
           ? sortField.direction
           : Direction.UNI;
       return (
-        <ThDivContainer key={`header-key-${index}`}>
+        <TableItemContainer key={`header-key-${index}`}>
           <Label displaySize={Size.LARGE} bold={true} label={dataField.name} />
           {dataField.sortable === true && (
             <Arrow
@@ -140,26 +168,28 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
               onClick={() => sortOperator(dataField.name)}
             />
           )}
-        </ThDivContainer>
+        </TableItemContainer>
       );
     });
     return (
       <TableHeaderContainer size={dataColumnLength} hasSelector={hasSelector}>
-        {type !== undefined && type.name === 'radio' && <TdSelectorContainer />}
+        {type !== undefined && type.name === 'radio' && <TableItemContainer />}
         {type !== undefined && type.name === 'checkbox' && (
-          <TdSelectorContainer>
+          <TableItemContainer>
             <Checkbox
-              checked={selectedCheckboxes.every((item) => item)}
+              checked={Object.keys(selectedCheckboxes).every(
+                (item) => selectedCheckboxes[item]
+              )}
               value={'all-check'}
               displaySize={Size.NORMAL}
               onChange={() => onCheckboxAllChange()}
             />
-          </TdSelectorContainer>
+          </TableItemContainer>
         )}
 
-        <ThItemsContainer size={dataColumnLength} hasSelector={hasSelector}>
+        <TdItemsContainer size={dataColumnLength} hasSelector={hasSelector}>
           {headers}
-        </ThItemsContainer>
+        </TdItemsContainer>
       </TableHeaderContainer>
     );
   }
@@ -181,9 +211,15 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
 
   function generateData() {
     return displayData.map((data, index) => {
-      const displayDataItem = Object.keys(data).map((item, index) => {
+      const displayDataItem = Object.keys(data).map((item, itemIndex) => {
+        const showColumn = dataFields.some((field) => {
+          return field.name === item;
+        });
+        if (!showColumn) {
+          return;
+        }
         return (
-          <TdDivContainer key={`data-item-key-${index}`}>
+          <TableItemContainer key={`data-item-key-${itemIndex}`}>
             <LabelDataField
               displaySize={Size.NORMAL}
               bold={true}
@@ -193,9 +229,9 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
             />
             <LabelValueField
               displaySize={Size.NORMAL}
-              label={data[`${item}`].toString()}
+              label={data[`${item}`]}
             />
-          </TdDivContainer>
+          </TableItemContainer>
         );
       });
       return (
@@ -206,30 +242,28 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
           isSelected={
             type !== undefined &&
             type.name === 'radio' &&
-            data[`${type.selectKey}`] === selectedRadio
+            data[`ID`] === selectedRadio
           }
         >
           {type !== undefined && type.name === 'radio' && (
-            <TdSelectorContainer>
+            <TableItemContainer>
               <Radio
-                checked={data[`${type.selectKey}`] === selectedRadio}
-                value={data[`${type.selectKey}`].toString()}
+                checked={data[`ID`] === selectedRadio}
+                value={data[`ID`]}
                 displaySize={Size.NORMAL}
-                onChange={() =>
-                  onRadioChange(data[`${type.selectKey}`].toString())
-                }
+                onChange={() => onRadioChange(data[`ID`])}
               />
-            </TdSelectorContainer>
+            </TableItemContainer>
           )}
           {type !== undefined && type.name === 'checkbox' && (
-            <TdSelectorContainer>
+            <TableItemContainer>
               <Checkbox
-                checked={selectedCheckboxes[index]}
-                value={data[`${type.selectKey}`].toString()}
+                checked={selectedCheckboxes[data[`ID`]]}
+                value={data[`ID`]}
                 displaySize={Size.NORMAL}
-                onChange={() => onCheckboxChange(index)}
+                onChange={() => onCheckboxChange(data[`ID`])}
               />
-            </TdSelectorContainer>
+            </TableItemContainer>
           )}
           <TdItemsContainer size={dataColumnLength}>
             {displayDataItem}
@@ -250,16 +284,10 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
   );
 }
 
-type StyledComponentAddOnProps = {
-  size: number;
-  hasSelector?: boolean;
-  isSelected?: boolean;
-};
-
 const TableCollectionContainer = styled.div`
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
 `;
 
 const TableSummariseHeaderContainer = styled.div<StyledComponentAddOnProps>`
@@ -288,7 +316,7 @@ const TableHeaderContainer = styled.div<StyledComponentAddOnProps>`
   }};
   grid-template-columns: ${({ hasSelector }) => {
     if (hasSelector) {
-      return `1fr 4fr`;
+      return `1fr 5fr`;
     }
     return `1fr`;
   }};
@@ -303,20 +331,17 @@ const TableItemsContainer = styled.div<StyledComponentAddOnProps>`
   display: grid;
   grid-template-columns: ${({ hasSelector }) => {
     if (hasSelector) {
-      return `1fr 4fr`;
+      return `1fr 5fr`;
     }
     return `1fr`;
   }};
   background-color: ${({ isSelected, theme }) =>
     isSelected ? theme.color.SECONDARY : ''};
   border-bottom: ${({ theme }) => `0.1rem solid ${theme.color.UNDERLINED}`};
-`;
 
-const TdDivContainer = styled.div`
-  padding: 2.4rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  &:nth-last-child(1) {
+    border-bottom: 0.1rem solid transparent;
+  }
 `;
 
 const TdItemsContainer = styled.div<StyledComponentAddOnProps>`
@@ -335,33 +360,10 @@ const TdItemsContainer = styled.div<StyledComponentAddOnProps>`
   }
 `;
 
-const ThItemsContainer = styled.div<StyledComponentAddOnProps>`
-  display: grid;
-  grid-template-columns: ${({ size }) => {
-    if (size > 0 && size <= 3) {
-      return `repeat(${size}, 1fr);`;
-    }
-    return `1fr`;
-  }};
-
-  @media ${devices.laptop} {
-    grid-template-columns: ${({ size }) => {
-      return `repeat(${size}, 1fr);`;
-    }};
-  }
-`;
-
-const TdSelectorContainer = styled.div`
+const TableItemContainer = styled.div`
   padding: 2.4rem;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const ThDivContainer = styled.div`
-  padding: 2.4rem;
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
 `;
 

@@ -30,7 +30,6 @@ export function CustomerTable() {
       }}
       type={{
         name: 'radio',
-        selectKey: 'Name',
       }}
     />
   );

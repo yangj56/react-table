@@ -22,7 +22,6 @@ export function CompanyTable() {
       }}
       type={{
         name: 'checkbox',
-        selectKey: 'Company Name',
       }}
     />
   );
