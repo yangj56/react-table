@@ -1,12 +1,8 @@
 import { render, screen } from '@testing-library/react';
+import { Color, Themes } from 'react-component-library';
+import { ThemeType } from 'react-component-library/dist/utils/typings';
+import { ThemeProvider } from 'styled-components';
 import { Table } from './components/table';
-// import Table from './components/simple';
-
-// test('test render table with data has 3 columns', () => {
-//   render(<Table />);
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
 
 describe('test', () => {
   it('inner test', () => {
@@ -32,8 +28,25 @@ describe('test', () => {
         sortable: false,
       },
     ];
-    render(<Table data={testData} dataFields={testDataFields} />);
-    // render(<Table name="yang" />);
+    render(
+      <ThemeProvider
+        theme={{
+          name: ThemeType.THEME_1,
+          color: {
+            PRIMARY: Color.PURPLE,
+            SECONDARY: Color.LIGHT_PURPLE,
+            BORDER: Color.GREY,
+            BLACK: Color.BLACK,
+            WHITE: Color.WHITE,
+            UNDERLINED: Color.LIGHT_GREY,
+            NEUTRAL: Color.DARK_WHITE,
+          },
+          fontFamily: 'Avenir',
+        }}
+      >
+        <Table data={testData} dataFields={testDataFields} />
+      </ThemeProvider>
+    );
     expect(true).toBeTruthy();
   });
 });

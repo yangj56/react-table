@@ -1,0 +1,16 @@
+{
+  "preset": "ts-jest/presets/js-with-ts",
+  "testEnvironment": "jsdom",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    ".+\\.(css|less|sass|scss|svg)$": "identity-obj-proxy"
+  },
+  "setupFilesAfterEnv": [
+    "regenerator-runtime/runtime",
+    "@testing-library/jest-dom/extend-expect"
+  ],
+  "testPathIgnorePatterns": ["node_modules"],
+  "transformIgnorePatterns": ["node_modules/(?!(react-component-library))"]
+}
