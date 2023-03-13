@@ -9,7 +9,7 @@ export function CompanyTable() {
       dataFields={[
         {
           name: 'BPN',
-          sortable: true,
+          sortable: false,
         },
         {
           name: 'Company Name',

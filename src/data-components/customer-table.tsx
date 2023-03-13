@@ -13,7 +13,7 @@ export function CustomerTable() {
         },
         {
           name: 'Mobile',
-          sortable: true,
+          sortable: false,
         },
         {
           name: 'Expiry',
