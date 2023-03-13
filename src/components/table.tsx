@@ -159,13 +159,14 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
           ? sortField.direction
           : Direction.UNI;
       return (
-        <TableItemContainer key={`header-key-${index}`}>
+        <TableItemContainer key={`header-key-${index}`} data-testid={'column'}>
           <Label displaySize={Size.LARGE} bold={true} label={dataField.name} />
           {dataField.sortable === true && (
             <Arrow
               direction={direction}
               displaySize={Size.NORMAL}
               onClick={() => sortOperator(dataField.name)}
+              data-testid={'sort'}
             />
           )}
         </TableItemContainer>
@@ -230,6 +231,7 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
             <LabelValueField
               displaySize={Size.NORMAL}
               label={data[`${item}`]}
+              data-testid={`column-${itemIndex}`}
             />
           </TableItemContainer>
         );
@@ -274,7 +276,7 @@ export function Table({ data, dataFields, sortableField, type }: Props) {
   }
 
   return (
-    <Base shadow={true} shape={BaseShape.ROUND}>
+    <Base shadow={true} shape={BaseShape.ROUND} data-testid={'base'}>
       <TableCollectionContainer>
         {generateHeader()}
         {generateSummariseHeader()}

@@ -2,7 +2,8 @@
   "preset": "ts-jest/presets/js-with-ts",
   "testEnvironment": "jsdom",
   "transform": {
-    "^.+\\.tsx?$": "ts-jest"
+    "^.+\\.tsx?$": "ts-jest",
+    "\\.es.js?$": "jest-esm-transformer"
   },
   "moduleNameMapper": {
     ".+\\.(css|less|sass|scss|svg)$": "identity-obj-proxy"

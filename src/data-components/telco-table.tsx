@@ -3,27 +3,27 @@ import { telcoDummyData } from '../data/dummy';
 import { Table } from '../components/table';
 
 export function TelcoTable() {
-  return (
-    <Table
-      data={telcoDummyData}
-      dataFields={[
-        {
-          name: 'Operator',
-          sortable: true,
-        },
-        {
-          name: 'Headset Display',
-          sortable: true,
-        },
-        {
-          name: '3G Availability',
-          sortable: false,
-        },
-      ]}
-      sortableField={{
-        name: 'Operator',
-        direction: Direction.UP,
-      }}
-    />
-  );
+  const testData: Record<string, string>[] = [
+    {
+      ID: 'telco-1',
+      field1: 'test1-1',
+      field2: 'test1-2',
+    },
+    {
+      ID: 'telco-2',
+      field1: 'test2-1',
+      field2: 'test2-2',
+    },
+  ];
+  const testDataFields = [
+    {
+      name: 'field1',
+      sortable: false,
+    },
+    {
+      name: 'field2',
+      sortable: false,
+    },
+  ];
+  return <Table data={testData} dataFields={testDataFields} />;
 }
