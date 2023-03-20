@@ -1,6 +1,6 @@
 import { Direction } from 'react-component-library';
-import { customerDummydata } from '../data/dummy';
 import { Table } from '../components/table';
+import { customerDummydata } from '../data/dummy';
 
 export function CustomerTable() {
   return (

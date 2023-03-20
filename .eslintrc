@@ -10,7 +10,7 @@
       "version": "detect"
     }
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "eslint-plugin-import-helpers"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -24,10 +24,32 @@
   },
   "ignorePatterns": ["node_modules/**/*", "*.js"],
   "rules": {
-    "no-console": "warn",
+    "no-console": "off",
     "eqeqeq": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "security/detect-object-injection": "off"
+    "security/detect-object-injection": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "import-helpers/order-imports": [
+      "error",
+      {
+        "groups": [
+          "module",
+          "/^@assets/",
+          "/^@common/",
+          "/^@components/",
+          "/^@config/",
+          "/^@consts/",
+          "/^@hooks/",
+          "/^@mocks/",
+          "/^@pages/",
+          "/^@store/",
+          "/^@typings/",
+          "/^@utils/",
+          ["parent", "sibling", "index"]
+        ],
+        "alphabetize": { "order": "asc", "ignoreCase": true }
+      }
+    ]
   }
 }

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import {
   Arrow,
@@ -9,7 +10,6 @@ import {
   Radio,
   Size,
 } from 'react-component-library';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { devices } from '../utils/breakpoints';
 import { createCheckboxIdState } from '../utils/helpers';

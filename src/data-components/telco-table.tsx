@@ -1,6 +1,6 @@
 import { Direction } from 'react-component-library';
-import { telcoDummyData } from '../data/dummy';
 import { Table } from '../components/table';
+import { telcoDummyData } from '../data/dummy';
 
 export function TelcoTable() {
   return (

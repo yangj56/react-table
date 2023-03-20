@@ -1,15 +1,13 @@
-import styled, { DefaultTheme, ThemeProvider } from 'styled-components';
+import { useState } from 'react';
 import {
   GlobalStyles,
-  Themes,
-  Size,
-  Radio,
   Label,
+  Radio,
+  Size,
+  Themes,
 } from 'react-component-library';
-import { useState } from 'react';
-import { CompanyTable } from './data-components/company-table';
-import { CustomerTable } from './data-components/customer-table';
-import { TelcoTable } from './data-components/telco-table';
+import styled, { DefaultTheme, ThemeProvider } from 'styled-components';
+import { Router } from './router';
 
 function App() {
   const defaultBasicDefault = Themes[0];
@@ -41,9 +39,7 @@ function App() {
             <Label label="Switch theme: " displaySize={Size.NORMAL} />
             <ThemeContainer>{generateRadioButtons()}</ThemeContainer>
           </DivContainer>
-          <TelcoTable />
-          <CustomerTable />
-          <CompanyTable />
+          <Router />
         </DisplayContainer>
       </MainContainer>
     </ThemeProvider>
